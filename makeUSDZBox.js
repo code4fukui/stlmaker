@@ -36,5 +36,5 @@ export const makeUSDZBox = async (width, height, depth) => {
   }
   w.seekTo(bin.length);
   const bin2 = w.toBytes();
-  return await zip([{ name: usdc, data: bin2 }])
+  return await zip([{ name: usdc, data: bin2 }], false); // must be uncompressed zip
 };
