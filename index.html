@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>box usdzmaker</title>
+</head><body>
+<h1>box usdzmaker</h1>
+<label>width</label><input id=inw value=15>cm<br>
+<label>height</label><input id=inh value=15>cm<br>
+<label>depth</label><input id=ind value=15>cm<br>
+<a class=link href="./" id=link><img src=ar.jpg><br>USDZ</a><br>
+<!--<a rel=ar href="./box.usdz"><img src=ar.jpg><br>(box)</a>-->
+<div id=divmessage></div>
+<hr>
+Quick Look: <a href=https://developer.apple.com/augmented-reality/quick-look/>Quick Look Gallery - Augmented Reality - Apple Developer</a><br>
+<a href=https://github.com/code4fukui/usdzmaker/>src on GitHub</a><br>
+
+<script type="module">
+import { makeUSDZBox } from "./makeUSDZBox.js";
+import { encodeData } from "https://code4fukui.github.io/dataencoder/encodeData.js";
+
+const isSupportedARQuickView = () => {
+  const a = document.createElement("a");
+  return a.relList.supports("ar");
+};
+
+if (!isSupportedARQuickView()) {
+  divmessage.textContent = "not supported AR view";
+}
+
+inw.oninput = inh.oninput = ind.oninput = async () => {
+  const w = parseFloat(inw.value) / 100;
+  const h = parseFloat(inh.value) / 100;
+  const d = parseFloat(ind.value) / 100;
+  const bin = await makeUSDZBox(w, h, d);
+  //console.log(bin);
+  const data = encodeData("model/vnd.usdz+zip", bin);
+  link.setAttribute("rel", "ar");
+  link.setAttribute("href", data);
+};
+inw.oninput();
+</script>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 120%;
+}
+.link {
+  display: inline-block;
+  margin: 1em 0;
+}
+label {
+  display: inline-block;
+  width: 4em;
+}
+input {
+  font-size: 120%;
+  width: 3em;
+  padding: .2em;
+  margin: .2em;
+}
+button {
+  font-size: 100%;
+  margin: 2em 0;
+  padding: .5em;
+}
+</style>
+
+</body></html>
