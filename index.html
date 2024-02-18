@@ -2,12 +2,14 @@
 <title>box usdzmaker</title>
 </head><body>
 <h1>box usdzmaker</h1>
-<label>width</label><input id=inw value=15>cm<br>
-<label>height</label><input id=inh value=15>cm<br>
-<label>depth</label><input id=ind value=15>cm<br>
+<main>
+<span>width</span><input id=inw value=15>cm<br>
+<span>height</span><input id=inh value=15>cm<br>
+<span>depth</span><input id=ind value=15>cm<br>
 <a class=link href="./" id=link><img src=ar.jpg><br>USDZ</a><br>
 <!--<a rel=ar href="./box.usdz"><img src=ar.jpg><br>(box)</a>-->
 <div id=divmessage></div>
+</main>
 <hr>
 Quick Look: <a href=https://developer.apple.com/augmented-reality/quick-look/>Quick Look Gallery - Augmented Reality - Apple Developer</a><br>
 <a href=https://github.com/code4fukui/usdzmaker/>src on GitHub</a><br>
@@ -48,7 +50,7 @@ body {
   display: inline-block;
   margin: 1em 0;
 }
-label {
+main span {
   display: inline-block;
   width: 4em;
 }
