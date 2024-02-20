@@ -6,6 +6,10 @@ export class BinReader {
     this.bin = bin;
     this.le = littleendian;
   }
+  readUint8() {
+    if (this.p + 1 > this.bin.length) throw new Error("EOF");
+    return this.bin[this.p++];
+  }
   readUint32() {
     const p = this.p;
     const b = this.bin;
@@ -20,7 +24,14 @@ export class BinReader {
       return res;
     }
   }
+  readUint64() {
+    if (!this.le) throw new Error("big endian not spported");
+    const n1 = this.readUint32();
+    const n2 = this.readUint32();
+    return BigInt(n1) | (BigInt(n2) << 32n);
+  }
   readBytes(n) {
+    n = this._cast(n);
     const p = this.p;
     const b = this.bin;
     if (p + n > b.length) throw new Error("EOF");
@@ -32,7 +43,10 @@ export class BinReader {
     return res;
   }
   readString(n) {
-    return new TextDecoder().decode(this.readBytes(n));
+    const s = new TextDecoder().decode(this.readBytes(n));
+    const np = s.indexOf("\0");
+    if (np >= 0) return s.substring(0, np);
+    return s;
   }
   readFloat32() {
     if (!this.le) throw new Error("big endian not spported");
@@ -41,16 +55,28 @@ export class BinReader {
     return f32array[0];
   }
   seek(offset) {
+    offset = this._cast(offset);
     const p = this.p + offset;
     const b = this.bin;
     if (p < 0) throw new Error("seek point is minus");
     if (p > b.length) throw new Error("EOF");
     this.p = p;
   }
+  skip(offset) {
+    this.seek(offset);
+  }
   seekTo(p) {
+    p = this._cast(p);
     const b = this.bin;
     if (p < 0) throw new Error("seek point is minus");
     if (p > b.length) throw new Error("EOF");
     this.p = p;
+  }
+  _cast(p) {
+    if (typeof p != "bigint") return p;
+    if (p > BigInt(Number.MAX_SAFE_INTEGER)) {
+      throw new Error("bigint not supported yet");
+    }
+    return Number(p);
   }
 }

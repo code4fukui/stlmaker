@@ -57,3 +57,21 @@ Deno.test("seek", () => {
   t.assertEquals(r.readFloat32(), .5);
   t.assertEquals(r.readFloat32(), .25);
 });
+Deno.test("bigint", () => {
+  const bin = new Uint8Array([
+    1, 0, 0, 0, 2, 0xff, 0x12, 0x44,
+    1, 0, 0, 0, 0, 0, 0, 0,
+  ]);
+  const r = new BinReader(bin);
+  t.assertEquals(r.readUint64(), 0x4412ff0200000001n);
+  t.assertEquals(r.readUint64(), 1n);
+});
+Deno.test("readUint8", () => {
+  const bin = new Uint8Array([
+    1, 2, 0xff
+  ]);
+  const r = new BinReader(bin);
+  t.assertEquals(r.readUint8(), 1);
+  t.assertEquals(r.readUint8(), 2);
+  t.assertEquals(r.readUint8(), 0xff);
+});
