@@ -1,44 +1,33 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
-<title>box usdzmaker</title>
+<title>box stlmaker</title>
 </head><body>
-<h1>box usdzmaker</h1>
+<h1>box stlmaker</h1>
 <main>
 <span>width</span><input id=inw value=15>cm<br>
 <span>height</span><input id=inh value=15>cm<br>
 <span>depth</span><input id=ind value=15>cm<br>
-<a class=link href="./" id=link><img src=ar.jpg><br>USDZ</a><br>
-<!--<a rel=ar href="./box.usdz"><img src=ar.jpg><br>(box)</a>-->
+<!--<a class=link href="./" id=link><img src=ar.jpg><br>STL</a><br>-->
+<!--<a rel=ar href="./box.stl"><img src=ar.jpg><br>(box)</a>-->
+<button id=btndownload>ダウンロード</button>
 <div id=divmessage></div>
 </main>
 <hr>
-Quick Look: <a href=https://developer.apple.com/augmented-reality/quick-look/>Quick Look Gallery - Augmented Reality - Apple Developer</a><br>
-USDZ Format: <a href=https://github.com/PixarAnimationStudios/USD/files/9984656/USDC.File.Format.Specification.Universal.Scene.Description.22.11.documentation.pdf>PDF</a>, <a href=https://github.com/PixarAnimationStudios/OpenUSD/pull/2086>USD Crate format Documentation by dgovil · Pull Request #2086 · PixarAnimationStudios/OpenUSD</a><br>
-<a href=https://github.com/code4fukui/usdzmaker/>src on GitHub</a><br>
+STL Format: <a href=https://en.wikipedia.org/wiki/STL_(file_format)>STL (file format) - Wikipedia</a><br>
+lib: <a href=https://github.com/code4fukui/STL>STL.js</a><br>
+Related: <a href=https://code4fukui.github.io/usdzmaker>box usdzmaker</a><br>
+<a href=https://github.com/code4fukui/stlmaker/>src on GitHub</a><br>
 
 <script type="module">
-import { makeUSDZBox } from "./makeUSDZBox.js";
-import { encodeData } from "https://code4fukui.github.io/dataencoder/encodeData.js";
+import { makeSTLBox } from "https://code4fukui.github.io/STL/makeSTLBox.js";
+import { downloadFile } from "https://js.sabae.cc/downloadFile.js";
 
-const isSupportedARQuickView = () => {
-  const a = document.createElement("a");
-  return a.relList.supports("ar");
-};
-
-if (!isSupportedARQuickView()) {
-  divmessage.textContent = "not supported AR view";
-}
-
-inw.oninput = inh.oninput = ind.oninput = async () => {
+btndownload.onclick = async () => {
   const w = parseFloat(inw.value) / 100;
   const h = parseFloat(inh.value) / 100;
   const d = parseFloat(ind.value) / 100;
-  const bin = await makeUSDZBox(w, h, d);
-  //console.log(bin);
-  const data = encodeData("model/vnd.usdz+zip", bin);
-  link.setAttribute("rel", "ar");
-  link.setAttribute("href", data);
+  const bin = await makeSTLBox(w, h, d);
+  downloadFile("box.stl", bin);
 };
-inw.oninput();
 </script>
 
 <style>
